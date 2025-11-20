@@ -70,7 +70,7 @@
                              newList = newList.filter(item => Number(item.age) <= Number(frag[2]))
                         }
                     } else {
-                       newList = votersList.filter(item => item.name.search(filter) > -1 || item.fName.startsWith(filter) || item.hName.startsWith(filter) || item.nameMl.search(filter) > -1 || item.fNameMl.startsWith(filter) || item.hNameMl.startsWith(filter) || item.id.startsWith(filter));
+                       newList = votersList.filter(item => item.name.search(filter) > -1 || item.fName.startsWith(filter) || item.hName.startsWith(filter) || item.nameMl.search(filter) > -1 || item.fNameMl.startsWith(filter) || item.hNameMl.startsWith(filter) || item.no.startsWith(filter));
                     }
 
                 newList.slice(0, limit).forEach((item, index) => {
