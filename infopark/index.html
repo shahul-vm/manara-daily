@@ -85,7 +85,12 @@
         }
 
         function getItem(item) {
-            return `<li class="list-group-item">
+        var eleClass = window['voters'][item.no] || '';
+        var elePhone = window['phone'][item.no] || '';
+        var elePhbtn = elePhone ? `<a href="tel:${elePhone}" class="btn btn-info">
+  📞 Call
+</a>` : '';
+            return `<li class="list-group-item ${eleClass}" id="li-wrap-${item.no}">
 <div class="voter-card">
              <div class="img-wrap">
                 <img src="./photos/${item.boothType}/q${item.no}.jpg" alt="">
@@ -96,11 +101,35 @@
               <div style="display: flex">Booth: <b>1</b>/House:  <b>${item.hNo}</b> /No: <b>${item.no}</b></div>
               <br />
               ${item.idNo}
+
+</div>
+
+
+</div>
+
+ <div>
+              <button type="button" class="btn btn-warning" onclick="updateParty('${item.no}','t20')" >T20</button>
+              <button  onclick="updateParty('${item.no}','udf')" type="button" class="btn btn-success">UDF</button>
+<button  onclick="updateParty('${item.no}','ldf')" type="button" class="btn btn-danger">LDF</button>
+<button  onclick="updateParty('${item.no}','bjp')" type="button" class="btn btn-primary">BJP</button>
+${elePhbtn}
+<button data-toggle="collapse" data-target="#demo-${item.no}"><i class="arrow down"></i></button>
+
+
+<div id="demo-${item.no}" class="collapse">
+<br />
+<input type='number' id="phone-${item.no}" value="${elePhone}" /> <button  onclick="updatePhone('${item.no}')" type="button" class="btn btn-info">Save</button>
 </div>
 
 </div>
 
             </li>`;
+        }
+
+        function updatePhone(id) {
+            var phone = document.getElementById('phone-'+id).value;
+             window['phone'][id]=phone;
+   window.localStorage.setItem("phone", JSON.stringify(window['phone'])) ;
         }
 
         function filterData(t) {
@@ -187,6 +216,31 @@
         .in ul {
             padding-left: 0;
         }
+        .t20{
+        background: lightyellow;
+        }
+
+        .bjp{
+        background: orange;
+        }
+        .udf{
+         background: lightgreen;
+        }
+        .ldf{
+         background: lightpink;
+        }
+        .arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
     </style>
 
 
@@ -218,12 +272,54 @@
 
 </div>
 <script>
+    window['voters'] = JSON.parse(window.localStorage.getItem("voters")) || {};
+    window['phone'] = JSON.parse(window.localStorage.getItem("phone")) || {};
+
     loadData();
 
     function loadMoreData() {
         limit += 50;
         loadData($('#filterData').val().toLowerCase());
     }
+
+
+function updateParty(id, targetClass) {
+   var oldId = id;
+   id = 'li-wrap-'+id
+  const allowed = ['t20','udf','ldf','bjp'];
+  if (!allowed.includes(targetClass)) {
+    return { ok: false, action: 'none', msg: `Invalid targetClass "${targetClass}". Allowed: ${allowed.join(', ')}` };
+  }
+
+  const el = document.getElementById(id);
+  if (!el) {
+    return { ok: false, action: 'none', msg: `No element found with id "${id}".` };
+  }
+
+  const cl = el.classList;
+
+  // If the element already has the target class -> remove it
+  if (cl.contains(targetClass)) {
+    cl.remove(targetClass);
+     window['voters'][oldId]='';
+     window.localStorage.setItem("voters", JSON.stringify(window['voters'])) ;
+
+    return { ok: true, action: 'removed', msg: `Removed "${targetClass}" from element #${id}.` };
+  }
+
+  // Remove any of the allowed classes (if present)
+  allowed.forEach(c => {
+    if (c !== targetClass && cl.contains(c)) cl.remove(c);
+  });
+
+  // Add the requested class
+  cl.add(targetClass);
+   window['voters'][oldId]=targetClass;
+   window.localStorage.setItem("voters", JSON.stringify(window['voters'])) ;
+
+  return { ok: true, action: 'added', msg: `Added "${targetClass}" to element #${id} (removed other allowed classes).` };
+}
+
 
 </script>
 </body>
