@@ -88,12 +88,12 @@
         }
 
         function getItem(item) {
-        var eleClass = window['voters'][item.no] || '';
-        var elePhone = window['phone'][item.no] || '';
+        var eleClass = window['voters'][item.boothType+'-'+item.no] || '';
+        var elePhone = window['phone'][item.boothType+'-'+item.no] || '';
         var elePhbtn = elePhone ? `<a href="tel:${elePhone}" class="btn btn-info">
   📞 Call
 </a>` : '';
-            return `<li class="list-group-item ${eleClass}" id="li-wrap-${item.no}">
+            return `<li class="list-group-item ${eleClass}" id="li-wrap-${item.boothType}-${item.no}">
 <div class="voter-card">
              <div class="img-wrap">
                 <img src="./photos/${item.boothType}/q${item.no}.jpg?u=i1" alt="">
@@ -111,17 +111,17 @@
 </div>
 
  <div>
-              <button type="button" class="btn btn-warning" onclick="updateParty('${item.no}','t20')" >T20</button>
-              <button  onclick="updateParty('${item.no}','udf')" type="button" class="btn btn-success">UDF</button>
-<button  onclick="updateParty('${item.no}','ldf')" type="button" class="btn btn-danger">LDF</button>
-<button  onclick="updateParty('${item.no}','bjp')" type="button" class="btn btn-primary">BJP</button>
+              <button type="button" class="btn btn-warning" onclick="updateParty('${item.boothType}-${item.no}','t20')" >T20</button>
+              <button  onclick="updateParty('${item.boothType}-${item.no}','udf')" type="button" class="btn btn-success">UDF</button>
+<button  onclick="updateParty('${item.boothType}-${item.no}','ldf')" type="button" class="btn btn-danger">LDF</button>
+<button  onclick="updateParty('${item.boothType}-${item.no}','bjp')" type="button" class="btn btn-primary">BJP</button>
 ${elePhbtn}
-<button data-toggle="collapse" data-target="#demo-${item.no}"><i class="arrow down"></i></button>
+<button data-toggle="collapse" data-target="#demo-${item.boothType}-${item.no}"><i class="arrow down"></i></button>
 
 
-<div id="demo-${item.no}" class="collapse">
+<div id="demo-${item.boothType}-${item.no}" class="collapse">
 <br />
-<input type='number' id="phone-${item.no}" value="${elePhone}" /> <button  onclick="updatePhone('${item.no}')" type="button" class="btn btn-info">Save</button>
+<input type='number' id="phone-${item.boothType}-${item.no}" value="${elePhone}" /> <button  onclick="updatePhone('${item.boothType}-${item.no}')" type="button" class="btn btn-info">Save</button>
 </div>
 
 </div>
